@@ -11,14 +11,31 @@ steps:
       path: /go
       sub_path: go/drone-ci-demo
     - name: binary
-      path: /tmp/binary
+      path: /tmp/drone-ci-demo
   commands:
   - go env -w GOPROXY="https://goproxy.cn,direct"
   - go mod tidy
   - go build -o drone-ci-demo main.go
   - chmod +x drone-ci-demo
   - ls -lh drone-ci-demo
-  - cp drone-ci-demo /tmp/binary/
+#  - cp -r * /tmp/drone-ci-demo/
+
+- name: build-image
+  image: gcr.io/kaniko-project/executor:latest
+  # 这里假设你已经在 Drone 里配置了一个 secret 叫 docker_config（内容是 config.json）
+  environment:
+    DOCKER_CONFIG:
+      from_secret: docker_config
+#  volumes:
+#    - name: binary
+#      path: /workspace/drone-ci-demo       # 共享上一阶段的二进制
+  commands:
+#    - ls -lh /workspace/drone-ci-demo
+    - /kaniko/executor
+      --dockerfile=Dockerfile
+      --context=/drone/src        # Drone 默认工作目录，包含你的 Dockerfile
+      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${DRONE_COMMIT_SHA}
+
 
 #- name: build image
 volumes:
@@ -26,5 +43,5 @@ volumes:
     claim:
       name: drone-build-cache
       read_only: false # <true|false>
-  - name: binary
-    temp: {}
+#  - name: binary
+#    temp: {}
