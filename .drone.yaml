@@ -32,9 +32,9 @@ steps:
   commands:
 #    - ls -lh /workspace/drone-ci-demo
     - /kaniko/executor
-      --dockerfile=Dockerfile
-      --context=/drone/src        # Drone 默认工作目录，包含你的 Dockerfile
-      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${DRONE_COMMIT_SHA}
+    - --dockerfile=Dockerfile
+    - --context=/drone/src        # Drone 默认工作目录，包含你的 Dockerfile
+    - --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${DRONE_COMMIT_SHA}
 
 
 #- name: build image
