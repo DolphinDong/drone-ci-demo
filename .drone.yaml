@@ -4,7 +4,7 @@ name: default
 
 steps:
 - name: greeting
-  image: golang:1.21
+  image: golang:1.25.5
   service_account_name: drone
   commands:
   - go mod tidy
