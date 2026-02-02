@@ -20,17 +20,17 @@ steps:
   - ls -lh drone-ci-demo
 #  - cp -r * /tmp/drone-ci-demo/
 
-  - name: docker
-    image: plugins/docker
-    settings:
-      repo: registry.cn-shenzhen.aliyuncs.com
-      use_cache: true
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-    tags:
-      - master
+- name: docker
+  image: plugins/docker
+  settings:
+    repo: registry.cn-shenzhen.aliyuncs.com
+    use_cache: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  tags:
+    - master
 
 
 #- name: build image
