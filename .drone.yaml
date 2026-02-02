@@ -20,21 +20,17 @@ steps:
   - ls -lh drone-ci-demo
 #  - cp -r * /tmp/drone-ci-demo/
 
-- name: build-image
-  image: gcr.io/kaniko-project/executor:latest
-  # 这里假设你已经在 Drone 里配置了一个 secret 叫 docker_config（内容是 config.json）
-  environment:
-    DOCKER_CONFIG:
-      from_secret: docker_config
-#  volumes:
-#    - name: binary
-#      path: /workspace/drone-ci-demo       # 共享上一阶段的二进制
-  commands:
-#    - ls -lh /workspace/drone-ci-demo
-    - /kaniko/executor
-    - --dockerfile=Dockerfile
-    - --context=/drone/src        # Drone 默认工作目录，包含你的 Dockerfile
-    - --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${DRONE_COMMIT_SHA}
+  - name: docker
+    image: plugins/docker
+    settings:
+      repo: registry.cn-shenzhen.aliyuncs.com
+      use_cache: true
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    tags:
+      - master
 
 
 #- name: build image
