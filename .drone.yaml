@@ -3,9 +3,22 @@ type: kubernetes
 name: default
 
 steps:
-- name: greeting
+- name: build binary
   image: golang:1.25.5
   service_account_name: drone
+  volumes:
+    - name: cache
+      path: /go
+      sub_path: go/drone-ci-demo
   commands:
   - go mod tidy
   - go build -o drone-ci-demo main.go
+  - chmod +x drone-ci-demo
+  - ls -lh drone-ci-demo
+
+#- name: build image
+volumes:
+  - name: cache
+    claim:
+      name: drone-build-cache
+      read_only: false # <true|false>
