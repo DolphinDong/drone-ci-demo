@@ -25,7 +25,9 @@ steps:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
   args:
-    - --dockerfile=Dockerfile --context=/drone/src --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:123
+    - --dockerfile=Dockerfile
+    - --context=/drone/src
+    - --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:123
 
 
 #- name: build image
