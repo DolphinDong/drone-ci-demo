@@ -30,7 +30,7 @@ steps:
       /kaniko/executor
       --dockerfile=Dockerfile
       --context=/drone/src
-      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${IMAGE_TAG}
+      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:7}
 
 
 #- name: build image
