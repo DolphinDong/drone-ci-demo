@@ -25,6 +25,7 @@ steps:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
   commands:
+    - export IMAGE_TAG=${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:7}
     - >
       /kaniko/executor
       --dockerfile=Dockerfile
