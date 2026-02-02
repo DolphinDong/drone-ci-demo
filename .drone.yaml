@@ -24,8 +24,10 @@ steps:
   volumes:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
+    - name: tmp
+      path: /tmp/data
   commands:
-    - executor --dockerfile=Dockerfile --context=/drone/src --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:123
+    - executor --dockerfile=Dockerfile --context=/tmp/data --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:123
 
 
 #- name: build image
@@ -37,3 +39,5 @@ volumes:
   - name: docker-config
     secret:
       name: docker-config
+  - name: tmp
+    temp: {}
