@@ -41,4 +41,4 @@ volumes:
       read_only: false # <true|false>
   - name: docker-config
     secret:
-      name: docker-config
+      name: docker_config
