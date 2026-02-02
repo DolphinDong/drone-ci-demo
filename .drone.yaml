@@ -18,7 +18,6 @@ steps:
   - go build -o drone-ci-demo main.go
   - chmod +x drone-ci-demo
   - ls -lh drone-ci-demo
-#  - cp -r * /tmp/drone-ci-demo/
 
 - name: build-image
   image: gcr.io/kaniko-project/executor:latest
@@ -41,4 +40,4 @@ volumes:
       read_only: false # <true|false>
   - name: docker-config
     secret:
-      name: docker_config
+      name: docker-config
