@@ -20,17 +20,17 @@ steps:
   - ls -lh drone-ci-demo
 #  - cp -r * /tmp/drone-ci-demo/
 
-- name: docker
-  image: plugins/docker
-  settings:
-    repo: registry.cn-shenzhen.aliyuncs.com
-    use_cache: true
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-  tags:
-    - master
+- name: build-image
+  image: gcr.io/kaniko-project/executor:latest
+  volumes:
+    - name: docker-config
+      path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
+  commands:
+    - | 
+      /kaniko/executor
+      --dockerfile=Dockerfile
+      --context=/drone/src
+      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${DRONE_COMMIT_SHA}
 
 
 #- name: build image
@@ -39,5 +39,6 @@ volumes:
     claim:
       name: drone-build-cache
       read_only: false # <true|false>
-#  - name: binary
-#    temp: {}
+  - name: docker-config
+    secret:
+      name: docker-config
