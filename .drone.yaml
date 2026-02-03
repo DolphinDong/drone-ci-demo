@@ -47,7 +47,7 @@ steps:
       /kaniko/executor
       --dockerfile=Dockerfile
       --context=/drone/src
-      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${IMAGE_TAG}
+      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:$IMAGE_TAG
 
 #- name: build image
 volumes:
