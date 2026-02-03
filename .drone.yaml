@@ -10,12 +10,12 @@ steps:
     MY_TAG: ${BUILD_TAG}
   commands:
     # 1. 判断是否在页面上输了 Tag
-    - if [ -z "${MY_TAG}" ]; then echo "No tag provided, using default commit"; exit 0; fi
+    - if [ -z "$MY_TAG" ]; then echo "No tag provided, using default commit"; exit 0; fi
 
     # 2. 如果输了 Tag，强制 Fetch 所有 tag 并切换
-    - echo "Manual build tag detected:${MY_TAG}"
+    - echo "Manual build tag detected:$MY_TAG"
     - git fetch --tags
-    - git checkout ${MY_TAG}
+    - git checkout $MY_TAG
     - echo "Switched to tag:$(git describe --tags)"
 - name: build binary
   image: golang:1.25.5
@@ -42,9 +42,9 @@ steps:
     MY_TAG: ${BUILD_TAG}
   commands:
     - |
-      if [  -n "${MY_TAG}" ] ; # 优先使用tag
+      if [  -n "$MY_TAG" ] ; # 优先使用tag
       then
-        export IMAGE_TAG='${MY_TAG}'
+        export IMAGE_TAG='$MY_TAG'
       else
         export IMAGE_TAG='${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}'
       fi
