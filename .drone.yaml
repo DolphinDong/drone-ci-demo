@@ -1,12 +1,13 @@
 kind: pipeline
 type: kubernetes
 name: default
-params:
-  - BUILD_TAG
 steps:
   # --- 新增步骤：手动切换到指定 Tag ---
 - name: checkout-tag
   image: registry.cn-shenzhen.aliyuncs.com/dolphindong/git:v2.52.0
+  environment:
+    MY_TAG:
+      from_secret: BUILD_TAG
   commands:
     # 先调试看看有哪些环境变量
     - env | grep -i tag || true
