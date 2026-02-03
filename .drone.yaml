@@ -30,6 +30,7 @@ steps:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
   commands:
+    - echo "DRONE_TAG=$DRONE_TAG"
     - |
       if [ -n "$DRONE_TAG" ]; then
        IMAGE_TAG="$DRONE_TAG"
