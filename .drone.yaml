@@ -14,7 +14,7 @@ steps:
     - echo "Manual build tag detected:$BUILD_TAG"
     - git fetch --tags
     - git checkout $BUILD_TAG
-    - echo "Switched to tag: $(git describe --tags)"
+    - echo "Switched to tag:$(git describe --tags)"
 - name: build binary
   image: golang:1.25.5
   service_account_name: drone
