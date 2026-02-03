@@ -6,14 +6,16 @@ steps:
   # --- 新增步骤：手动切换到指定 Tag ---
 - name: checkout-tag
   image: registry.cn-shenzhen.aliyuncs.com/dolphindong/git:v2.52.0
+  environment:
+    MY_TAG: ${BUILD_TAG}
   commands:
     # 1. 判断是否在页面上输了 Tag
-    - if [ -z "${BUILD_TAG}" ]; then echo "No tag provided, using default commit"; exit 0; fi
+    - if [ -z "${MY_TAG}" ]; then echo "No tag provided, using default commit"; exit 0; fi
 
     # 2. 如果输了 Tag，强制 Fetch 所有 tag 并切换
-    - echo "Manual build tag detected:${BUILD_TAG}"
+    - echo "Manual build tag detected:${MY_TAG}"
     - git fetch --tags
-    - git checkout ${BUILD_TAG}
+    - git checkout ${MY_TAG}
     - echo "Switched to tag:$(git describe --tags)"
 - name: build binary
   image: golang:1.25.5
@@ -36,11 +38,13 @@ steps:
   volumes:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
+  environment:
+    MY_TAG: ${BUILD_TAG}
   commands:
     - |
-      if [  -n "${BUILD_TAG}" ] ; # 优先使用tag
+      if [  -n "${MY_TAG}" ] ; # 优先使用tag
       then
-        export IMAGE_TAG='${BUILD_TAG}'
+        export IMAGE_TAG='${MY_TAG}'
       else
         export IMAGE_TAG='${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}'
       fi
