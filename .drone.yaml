@@ -1,6 +1,12 @@
 kind: pipeline
 type: kubernetes
 name: default
+
+#trigger:
+#  event:
+#    - push
+#    - tag        # 允许 tag 事件触发
+#    - custom
 steps:
 - name: build binary
   image: golang:1.25.5
