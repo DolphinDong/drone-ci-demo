@@ -18,11 +18,15 @@ steps:
     - name: binary
       path: /tmp/drone-ci-demo
   commands:
-  - go env -w GOPROXY="https://goproxy.cn,direct"
-  - go mod tidy
-  - go build -o drone-ci-demo main.go
-  - chmod +x drone-ci-demo
-  - ls -lh drone-ci-demo
+    - go env -w GOPROXY="https://goproxy.cn,direct"
+    - go mod tidy
+    - |
+      VERSION="${DRONE_TAG:-${DRONE_COMMIT_BRANCH}}"
+      COMMIT="${DRONE_COMMIT_SHA:0:9}"
+      BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+      go build -ldflags "-X 'main.Version=${VERSION}' -X 'main.GitCommit=${COMMIT}' -X 'main.BuildTime=${BUILD_TIME}'" -o drone-ci-demo main.go
+    - chmod +x drone-ci-demo
+    - ls -lh drone-ci-demo
 
 - name: build-image
   image: gcr.io/kaniko-project/executor:debug
