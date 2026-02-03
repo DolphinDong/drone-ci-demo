@@ -39,7 +39,7 @@ steps:
       if [ -n "$DRONE_TAG" ]; then
        IMAGE_TAG="$DRONE_TAG"
       else
-       IMAGE_TAG="${DRONE_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}"
+       IMAGE_TAG="${DRONE_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}_$(date +%Y%m%d%H%M%S)"
       fi
     - >
       /kaniko/executor
