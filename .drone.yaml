@@ -2,19 +2,6 @@ kind: pipeline
 type: kubernetes
 name: default
 steps:
-  # --- 新增步骤：手动切换到指定 Tag ---
-- name: checkout-tag
-  image: registry.cn-shenzhen.aliyuncs.com/dolphindong/git:v2.52.0
-  commands:
-    -  echo "run checkout-tag:${BUILD_TAG}"
-    -  echo "run checkout-tag:${DRONE_BUILD_TAG}"
-    # 1. 判断是否在页面上输了 Tag（直接用环境变量名）， 优先使用tag 页面上填写的变量BUILD_TAG
-    - if [ -z "$BUILD_TAG" ]; then echo "No tag provided, using default commit"; exit 0; fi
-    # 2. 如果输了 Tag，强制 Fetch 所有 tag 并切换
-    - echo "Manual build tag detected:$BUILD_TAG"
-    - git fetch --tags
-    - git checkout $BUILD_TAG
-    - echo "Switched to tag:$(git describe --tags)"
 - name: build binary
   image: golang:1.25.5
   service_account_name: drone
@@ -38,11 +25,10 @@ steps:
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
   commands:
     - |
-      if [  -n "$BUILD_TAG" ] ;
-      then
-        export IMAGE_TAG='$BUILD_TAG'
+      if [ -n "$DRONE_TAG" ]; then
+       IMAGE_TAG="$DRONE_TAG"
       else
-        export IMAGE_TAG='${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}'
+       IMAGE_TAG="${DRONE_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}"
       fi
     - >
       /kaniko/executor
