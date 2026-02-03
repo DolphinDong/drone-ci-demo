@@ -25,13 +25,18 @@ steps:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
   commands:
-    - export IMAGE_TAG=${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:7} && echo "image tag 1:$IMAGE_TAG"
-    - echo "image tag 2:$IMAGE_TAG"
+    - |
+      if echo "${CI_COMMIT_BRANCH}" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' ; # 优先使用tag
+      then
+        export IMAGE_TAG='${CI_COMMIT_BRANCH}'
+      else
+        export IMAGE_TAG='${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}'
+      fi
     - >
       /kaniko/executor
       --dockerfile=Dockerfile
       --context=/drone/src
-      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:7}
+      --destination=registry.cn-shenzhen.aliyuncs.com/dolphindong/drone-ci-demo:${IMAGE_TAG}
 
 
 #- name: build image
