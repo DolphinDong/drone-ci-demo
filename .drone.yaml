@@ -9,6 +9,7 @@ steps:
   environment:
     MY_TAG: ${BUILD_TAG}
   commands:
+    - sleep 6000
     # 1. 判断是否在页面上输了 Tag
     - if [ -z "$MY_TAG" ]; then echo "No tag provided, using default commit"; exit 0; fi
 
