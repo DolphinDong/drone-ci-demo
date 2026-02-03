@@ -11,7 +11,7 @@ steps:
     - if [ -z "$BUILD_TAG" ]; then echo "No tag provided, using default commit"; exit 0; fi
 
     # 2. 如果输了 Tag，强制 Fetch 所有 tag 并切换
-    - echo "Manual build tag detected: $BUILD_TAG"
+    - echo "Manual build tag detected:$BUILD_TAG"
     - git fetch --tags
     - git checkout $BUILD_TAG
     - echo "Switched to tag: $(git describe --tags)"
