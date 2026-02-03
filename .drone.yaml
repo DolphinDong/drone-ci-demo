@@ -35,13 +35,11 @@ steps:
   volumes:
     - name: docker-config
       path: /kaniko/.docker                 # 这里挂载阿里云登录的 config.json
-  environment:
-    MY_TAG: ${BUILD_TAG}
   commands:
     - |
-      if [  -n "$MY_TAG" ] ; # 优先使用tag
+      if [  -n "$BUILD_TAG" ] ; # 优先使用tag
       then
-        export IMAGE_TAG='$MY_TAG'
+        export IMAGE_TAG='$BUILD_TAG'
       else
         export IMAGE_TAG='${CI_COMMIT_BRANCH}_${DRONE_COMMIT_SHA:0:9}'
       fi
